@@ -78,6 +78,7 @@ html.auth-pending .app-main,html.auth-pending .sidebar{visibility:hidden}
     margin-right: 0;
     background: transparent;
     overflow: visible;
+    transform: translateX(-6px); /* アイコンだけ左に6px移動 */
   }
 
   .sidebar .brand-mark img {
