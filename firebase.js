@@ -21,7 +21,53 @@ export async function saveRate(rate,oldStart=null){const batch=writeBatch(db);if
 export async function removeRate(start){await deleteDoc(doc(col('rates'),start))}
 export const yen=n=>Number(n).toLocaleString('ja-JP',{maximumFractionDigits:2})+'円';
 export function rateFor(date,rates){return rates.filter(r=>r.startDate<=date).at(-1)||null}
-export function calculateRow(row,rates){const rate=rateFor(row.date,rates),periods=(row.periods||[]).length,minutes=Number(row.officeMinutes)||0,special=Number(row.specialAmount)||0;if(!rate)return {periods,minutes,special,total:special,missing:true};return {periods,minutes,special,total:periods*rate.periodRate+(periods===6?rate.periodRate*.25:0)+minutes/60*rate.officeHourlyRate+special,missing:false}}
+export function calculateRow(row, rates) {
+  const rate = rateFor(row.date, rates);
+
+  const periods = (row.periods || []).length;
+  const minutes = Number(row.officeMinutes) || 0;
+  const special = Number(row.specialAmount) || 0;
+
+  if (!rate) {
+    return {
+      periods,
+      minutes,
+      special: Math.round(special),
+      total: Math.round(special),
+      missing: true
+    };
+  }
+
+  // 通常コマ給
+  const normalPay = periods * rate.periodRate;
+
+  // 6コマ勤務の場合、6コマ目だけ25%割増
+  const extraPay = periods === 6
+    ? rate.periodRate * 0.25
+    : 0;
+
+  // コマ給を四捨五入
+  const periodPay = Math.round(normalPay + extraPay);
+
+  // 事務給を勤務日ごとに四捨五入
+  const officePay = Math.round(
+    (minutes / 60) * rate.officeHourlyRate
+  );
+
+  // 特別給も四捨五入
+  const specialPay = Math.round(special);
+
+  // すべて整数で合計
+  const total = periodPay + officePay + specialPay;
+
+  return {
+    periods,
+    minutes,
+    special: specialPay,
+    total,
+    missing: false
+  };
+}
 export function summarize(rows,rates){return rows.reduce((acc,row)=>{const r=calculateRow(row,rates);for(const k of ['periods','minutes','special','total'])acc[k]+=r[k];if(r.missing)acc.missing++;return acc},{periods:0,minutes:0,special:0,total:0,missing:0})}
 export function showError(e){console.error(e);const el=document.getElementById('sync-status');if(el)el.textContent='エラー：'+errorText(e);else alert('エラー：'+errorText(e))}
 export function toast(s){let el=document.getElementById('sync-status');if(!el){el=document.createElement('div');el.id='sync-status';document.querySelector('.content')?.prepend(el)}el.textContent=s;}
