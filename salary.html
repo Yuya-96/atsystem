@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<link href="meiko.png" rel="icon" type="image/png">
+<link href="meiko.png" rel="apple-touch-icon">
+<meta charset="utf-8">
+<title>給与確認</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="style.css" rel="stylesheet">
+<style>.rate-summary{margin:14px 0 22px;padding:16px;border:1px solid #dbeafe;border-radius:10px;background:#f8fbff}.rate-summary p{margin:6px 0}.rate-hint{font-size:13px;color:#64748b}.rate-summary a{display:inline-block;margin-top:8px}.salary-table-wrap{overflow-x:auto}</style>
+<script>document.documentElement.classList.add("auth-pending")</script></head>
+<body>
+<aside class="sidebar"><div class="brand"><span class="brand-mark"><img src="meiko.ico" alt="ロゴ"></span>出退勤システム</div><div class="nav-label">WORKSPACE</div><a class="nav-link" href="index.html"><span class="nav-icon">⌂</span>ホーム</a><a class="nav-link" href="input.html"><span class="nav-icon">＋</span>打刻入力</a><a class="nav-link" href="list.html"><span class="nav-icon">▦</span>勤怠一覧</a><a class="nav-link active" href="salary.html"><span class="nav-icon">◈</span>給与確認</a><a class="nav-link" href="rates.html"><span class="nav-icon">¥</span>給与単価設定</a><div class="sidebar-foot">ATTENDANCE SYSTEM<br>Personal workspace</div></aside>
+<div class="app-main"><header class="topbar"><div class="topbar-title">給与確認</div><div class="topbar-date" id="today"></div></header><main class="content"><div class="eyebrow">WORKSPACE</div><h1>給与確認</h1><p class="subtitle">給与の集計と内訳を確認できます。</p><div class="panel">
+<div class="rate-summary"><h2>現在の給与単価</h2><div id="current-rate"></div><a href="rates.html">給与単価を設定・履歴を確認 →</a></div>
+<h2>総支給額（全期間）</h2><div id="total-salary-display"></div>
+<label>年を選択: <select id="year-select"></select></label>
+<div id="month-picker"></div><div id="salary-display"></div>
+<h2>特別給理由</h2><div id="special-reasons-list"></div>
+<br><a href="index.html">メニューに戻る</a>
+</div></main></div>
+
+<script type="module" src="salary.js"></script></body></html>

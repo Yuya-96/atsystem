@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="meiko.png" rel="icon" type="image/png">
+<link href="meiko.png" rel="apple-touch-icon">
+<link href="style.css" rel="stylesheet">
+<title>給与単価設定</title>
+<style>
+.rate-form{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;margin:18px 0}.rate-form label{display:flex;flex-direction:column;gap:6px}.rate-form input{width:100%;box-sizing:border-box;padding:10px;border:1px solid #cbd5e1;border-radius:8px}.rate-table-wrap{overflow-x:auto}.rate-table{width:100%;border-collapse:collapse}.rate-table th,.rate-table td{padding:12px;border-bottom:1px solid #e2e8f0;text-align:left}.rate-actions{display:flex;gap:8px;flex-wrap:wrap}.rate-note{color:#64748b;font-size:13px;line-height:1.7}.rate-btn{padding:10px 16px;border:0;border-radius:8px;background:#2563eb;color:white;cursor:pointer}.rate-btn.secondary{background:#e2e8f0;color:#334155}.rate-btn.danger{background:#fee2e2;color:#991b1b}
+</style>
+<script>document.documentElement.classList.add("auth-pending")</script></head>
+<body>
+<aside class="sidebar"><div class="brand"><span class="brand-mark"><img src="meiko.ico" alt="ロゴ"></span>出退勤システム</div><div class="nav-label">WORKSPACE</div><a class="nav-link" href="index.html"><span class="nav-icon">⌂</span>ホーム</a><a class="nav-link" href="input.html"><span class="nav-icon">＋</span>打刻入力</a><a class="nav-link" href="list.html"><span class="nav-icon">▦</span>勤怠一覧</a><a class="nav-link" href="salary.html"><span class="nav-icon">◈</span>給与確認</a><a class="nav-link active" href="rates.html"><span class="nav-icon">¥</span>給与単価設定</a><div class="sidebar-foot">ATTENDANCE SYSTEM<br>Personal workspace</div></aside>
+<div class="app-main"><header class="topbar"><div class="topbar-title">給与単価設定</div><div class="topbar-date" id="today"></div></header><main class="content"><div class="eyebrow">WORKSPACE</div><h1>給与単価設定</h1><p class="subtitle">適用開始日ごとに単価を登録し、過去の履歴も確認できます。</p><div class="panel">
+<h2 id="form-title">新しい単価を登録</h2>
+<form id="rate-form"><div class="rate-form"><label>適用開始日<input id="start-date" type="date" required></label><label>コマ給（円）<input id="period-rate" type="number" min="0" step="0.01" required></label><label>事務時給（円）<input id="office-rate" type="number" min="0" step="0.01" required></label></div><p class="rate-note">1日6コマ勤務の場合は、超過給与を含めて計算します。適用終了日は次の単価の適用開始日前日として自動決定します。</p><button class="rate-btn" type="submit" id="save-btn">単価を登録</button> <button class="rate-btn secondary" type="button" id="cancel-btn" hidden>編集をキャンセル</button></form>
+<h2 style="margin-top:30px">単価履歴</h2><div class="rate-table-wrap"><table class="rate-table"><thead><tr><th>適用期間</th><th>コマ給</th><th>超過給</th><th>事務時給</th><th>操作</th></tr></thead><tbody id="rates-body"></tbody></table></div><p class="rate-note">※単価を編集・削除すると、その期間の給与集計も再計算されます。最初の適用開始日より前の勤務には単価が適用されません。</p><p><a href="salary.html">給与確認に戻る</a></p>
+</div></main></div>
+
+<script type="module" src="rates.js"></script></body></html>

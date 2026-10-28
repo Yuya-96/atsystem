@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="meiko.ico" type="image/x-icon">
+  <link rel="apple-touch-icon" href="meiko.png">
+  <title>打刻編集 | 出退勤システム</title>
+  <link rel="stylesheet" href="style.css">
+<script>document.documentElement.classList.add("auth-pending")</script></head>
+<body>
+<aside class="sidebar">
+  <div class="brand"><span class="brand-mark"><img src="meiko.ico" alt="ロゴ"></span><span class="brand-text">出退勤システム</span></div>
+  <div class="nav-label">WORKSPACE</div>
+  <a class="nav-link" href="index.html"><span class="nav-icon">⌂</span>ホーム</a>
+  <a class="nav-link" href="input.html"><span class="nav-icon">＋</span>打刻入力</a>
+  <a class="nav-link active" href="list.html"><span class="nav-icon">▦</span>勤怠一覧</a>
+  <a class="nav-link" href="salary.html"><span class="nav-icon">◈</span>給与確認</a>
+  <div class="sidebar-foot">ATTENDANCE SYSTEM<br>Personal workspace</div>
+</aside>
+<div class="app-main">
+  <header class="topbar"><div class="topbar-title">打刻編集</div><div class="topbar-date" id="today"></div></header>
+  <main class="content">
+    <div class="eyebrow">WORKSPACE</div>
+    <h1>打刻編集</h1>
+    <p class="subtitle">登録済みの勤務内容を変更します。</p>
+    <div class="panel form-card">
+      <form id="edit-form">
+        <label>日付: <input type="date" name="date" required></label><br><br>
+        <label>出勤コマ:</label><br>
+        <label><input type="checkbox" name="periods" value="1">1限</label>
+        <label><input type="checkbox" name="periods" value="2">2限</label>
+        <label><input type="checkbox" name="periods" value="3">3限</label>
+        <label><input type="checkbox" name="periods" value="4">4限</label>
+        <label><input type="checkbox" name="periods" value="5">5限</label>
+        <label><input type="checkbox" name="periods" value="6">6限</label><br><br>
+        <label>事務作業時間（分）: <input type="number" name="office_minutes" min="0" step="1"></label><br><br>
+        <label>特別給の理由: <input type="text" name="special_reason" placeholder="例：臨時会議"></label><br><br>
+        <label>特別給の額（円）: <input type="number" name="special_amount" min="0" step="1"></label><br><br>
+        <div class="form-group">
+          <label class="help-checkbox"><input type="checkbox" id="isHelp" name="isHelp"> ヘルプ勤務</label>
+          <div id="helpSelectArea" style="display:none; margin-top:15px;">
+            <label for="helpLocation">ヘルプ先</label>
+            <select id="helpLocation" name="helpLocation">
+              <option value="">ヘルプ先を選択してください</option>
+              <option value="イオン茅ケ崎中央教室">イオン茅ケ崎中央教室</option>
+              <option value="稲田堤駅前教室">稲田堤駅前教室</option>
+              <option value="大鳥居教室">大鳥居教室</option>
+              <option value="鹿島田教室">鹿島田教室</option>
+              <option value="菊名教室">菊名教室</option>
+              <option value="岸根公園駅前教室">岸根公園駅前教室</option>
+              <option value="久地教室">久地教室</option>
+              <option value="小机教室">小机教室</option>
+              <option value="神木本町教室">神木本町教室</option>
+              <option value="センター北あいたいタウン教室">センター北あいたいタウン教室</option>
+              <option value="たまプラーザ教室">たまプラーザ教室</option>
+              <option value="綱島教室">綱島教室</option>
+              <option value="中野島駅前教室">中野島駅前教室</option>
+              <option value="中山教室">中山教室</option>
+              <option value="初山教室">初山教室</option>
+              <option value="平塚旭教室">平塚旭教室</option>
+              <option value="平塚駅南口教室">平塚駅南口教室</option>
+              <option value="平塚四之宮教室">平塚四之宮教室</option>
+              <option value="平塚本校教室">平塚本校教室</option>
+              <option value="平間教室">平間教室</option>
+              <option value="溝の口教室">溝の口教室</option>
+              <option value="南加瀬教室">南加瀬教室</option>
+              <option value="宮崎台駅前教室">宮崎台駅前教室</option>
+              <option value="向ヶ丘遊園教室">向ヶ丘遊園教室</option>
+              <option value="武蔵小杉教室">武蔵小杉教室</option>
+              <option value="武蔵新城駅前教室">武蔵新城駅前教室</option>
+              <option value="元住吉教室">元住吉教室</option>
+              <option value="横浜三ツ沢教室">横浜三ツ沢教室</option>
+            </select>
+          </div>
+        </div>
+        <br>
+        <button type="submit" id="saveBtn">変更を保存</button>
+        <button type="button" id="deleteBtn" style="background:#fee2e2;color:#991b1b;">削除</button>
+        <a href="list.html">一覧に戻る</a>
+      </form>
+    </div>
+  </main>
+</div>
+
+<script type="module" src="edit.js"></script></body>
+</html>
