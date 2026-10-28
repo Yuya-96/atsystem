@@ -74,4 +74,51 @@ export function toast(s){let el=document.getElementById('sync-status');if(!el){e
 export async function logout(){await signOut(auth);location.reload()}
 export async function migrateLocal(){const raw=localStorage.getItem('attendance');const rawRates=localStorage.getItem('salaryRates');const attendance=raw?JSON.parse(raw):[],rates=rawRates?JSON.parse(rawRates):[];if(!Array.isArray(attendance)||!Array.isArray(rates))throw Error('保存データ形式が不正です');const existing=await readAttendance();const seen=new Set(existing.map(r=>JSON.stringify([r.date,r.periods,r.officeMinutes,r.specialReason,r.specialAmount,r.isHelp,r.helpLocation])));let count=0;for(const r of attendance){const key=JSON.stringify([r.date,r.periods,r.officeMinutes,r.specialReason,r.specialAmount,r.isHelp,r.helpLocation]);if(seen.has(key))continue;const {id,...row}=r;await addAttendance(row);seen.add(key);count++}let rateCount=0;const existingRates=await readRates();for(const r of rates){if(existingRates.some(x=>x.startDate===r.startDate&&x.periodRate===r.periodRate&&x.officeHourlyRate===r.officeHourlyRate))continue;if(existingRates.some(x=>x.startDate===r.startDate&&JSON.stringify(x)!==JSON.stringify(r)))throw Error(r.startDate+' の単価がクラウドと異なります。単価設定画面で確認してください。');await saveRate(r);rateCount++}return {count,rateCount}}
 export function downloadBackup(){const payload={attendance:JSON.parse(localStorage.getItem('attendance')||'[]'),salaryRates:JSON.parse(localStorage.getItem('salaryRates')||'[]'),exportedAt:new Date().toISOString()};const url=URL.createObjectURL(new Blob([JSON.stringify(payload,null,2)],{type:'application/json'}));const a=document.createElement('a');a.href=url;a.download='勤怠ローカルバックアップ_'+new Date().toISOString().slice(0,10)+'.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000)}
-export function setupCommon(){document.getElementById('today')&&(document.getElementById('today').textContent=new Intl.DateTimeFormat('ja-JP',{year:'numeric',month:'long',day:'numeric',weekday:'short'}).format(new Date()));const foot=document.querySelector('.sidebar-foot');if(foot){const b=document.createElement('button');b.className='logout-btn';b.textContent='ログアウト';b.onclick=logout;foot.prepend(b)}const nav=document.querySelector('.sidebar-foot');if(nav){const a=document.createElement('a');a.href='rates.html';a.className='nav-link';a.innerHTML='<span class="nav-icon">¥</span>給与単価設定';nav.before(a)}}
+export function setupCommon() {
+
+  // 今日の日付を表示
+  const today = document.getElementById('today');
+
+  if (today) {
+    today.textContent = new Intl.DateTimeFormat('ja-JP', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+      weekday: 'short'
+    }).format(new Date());
+  }
+
+  // ログアウトボタン
+  const foot = document.querySelector('.sidebar-foot');
+
+  if (foot && !foot.querySelector('.logout-btn')) {
+    const button = document.createElement('button');
+
+    button.className = 'logout-btn';
+    button.textContent = 'ログアウト';
+    button.onclick = logout;
+
+    foot.prepend(button);
+  }
+
+  // 給与単価設定リンクが存在しない場合のみ追加
+  const sidebar = document.querySelector('.sidebar');
+
+  if (
+    sidebar &&
+    !sidebar.querySelector('a[href="rates.html"]')
+  ) {
+    const link = document.createElement('a');
+
+    link.href = 'rates.html';
+    link.className = 'nav-link';
+    link.innerHTML =
+      '<span class="nav-icon">¥</span>給与単価設定';
+
+    if (foot) {
+      foot.before(link);
+    } else {
+      sidebar.appendChild(link);
+    }
+  }
+}
