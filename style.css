@@ -72,13 +72,13 @@ html.auth-pending .app-main,html.auth-pending .sidebar{visibility:hidden}
 /* サイドバーのロゴサイズ */
 @media (min-width: 721px) {
   .sidebar .brand-mark {
-    width: 60px;
-    height: 60px;
+    width: 55px;
+    height: 55px;
     flex-shrink: 0;
     margin-right: 0;
     background: transparent;
     overflow: visible;
-    transform: translateX(-6px); /* アイコンだけ左に6px移動 */
+    transform: translateX(-8px); /* アイコンだけ左に6px移動 */
   }
 
   .sidebar .brand-mark img {
