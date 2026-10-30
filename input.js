@@ -1,4 +1,3 @@
-```javascript
 import {
   requireUser,
   addAttendance,
