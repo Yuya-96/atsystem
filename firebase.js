@@ -1,6 +1,7 @@
 import {initializeApp} from 'https://www.gstatic.com/firebasejs/13.1.0/firebase-app.js';
 import {getAuth,GoogleAuthProvider,signInWithPopup,signInWithRedirect,getRedirectResult,onAuthStateChanged,signOut} from 'https://www.gstatic.com/firebasejs/13.1.0/firebase-auth.js';
 import {getFirestore,collection,doc,getDocs,setDoc,deleteDoc,writeBatch} from 'https://www.gstatic.com/firebasejs/13.1.0/firebase-firestore.js';
+import { setupMobileMenu } from './mobile-menu.js';
 const firebaseConfig={apiKey:'AIzaSyC3kY7LmRxYCZn6-xLIV_jE8Z7NhO0JbWs',authDomain:'atsystem-2d229.firebaseapp.com',projectId:'atsystem-2d229',storageBucket:'atsystem-2d229.firebasestorage.app',messagingSenderId:'788813868521',appId:'1:788813868521:web:1afe762612dbd2fac5ef78'};
 const app=initializeApp(firebaseConfig),auth=getAuth(app),db=getFirestore(app);
 const provider=new GoogleAuthProvider();
