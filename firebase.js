@@ -122,4 +122,5 @@ export function setupCommon() {
       sidebar.appendChild(link);
     }
   }
+  setupMobileMenu();
 }
