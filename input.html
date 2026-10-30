@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 
 <html lang="ja">
@@ -12,75 +13,161 @@
 
   <!-- Androidのホーム画面用 -->
   <link rel="manifest" href="./manifest.webmanifest">
-<title>打刻入力</title>
 
-<meta content="width=device-width, initial-scale=1" name="viewport"/><link href="style.css" rel="stylesheet"/><script>document.documentElement.classList.add("auth-pending")</script></head>
+  <title>打刻入力</title>
+
+  <meta content="width=device-width, initial-scale=1" name="viewport"/>
+  <link href="style.css" rel="stylesheet"/>
+  <script>
+    document.documentElement.classList.add("auth-pending")
+  </script>
+</head>
+
 <body>
-<aside class="sidebar">
-  <div class="brand">
-    <span class="brand-mark">
-      <img src="meiko.ico" alt="ロゴ">
-    </span>
-    出退勤システム
-  </div><div class="nav-label">WORKSPACE</div><a class="nav-link" href="index.html"><span class="nav-icon">⌂</span>ホーム</a><a class="nav-link active" href="input.html"><span class="nav-icon">＋</span>打刻入力</a><a class="nav-link" href="list.html"><span class="nav-icon">▦</span>勤怠一覧</a><a class="nav-link" href="salary.html"><span class="nav-icon">◈</span>給与確認</a><div class="sidebar-foot">ATTENDANCE SYSTEM<br/>Personal workspace</div></aside><div class="app-main"><header class="topbar"><div class="topbar-title">打刻入力</div><div class="topbar-date" id="today"></div></header><main class="content"><div class="eyebrow">WORKSPACE</div><h1>打刻入力</h1><p class="subtitle">勤務内容を入力して記録します。</p><div class="panel form-card">
-<form id="attendance-form">
-<label>日付: <input name="date" required="" type="date"/></label><br><br/>
-<!-- ヘルプ勤務 -->
-<div class="form-group">
-  <label class="help-checkbox">
-    <input type="checkbox" id="isHelp" name="isHelp">
-    ヘルプ勤務
-  </label>
+  <aside class="sidebar">
+    <div class="brand">
+      <span class="brand-mark">
+        <img src="meiko.ico" alt="ロゴ">
+      </span>
+      出退勤システム
+    </div>
 
-  <div id="helpSelectArea" style="display: none; margin-top: 15px;">
-    <label for="helpLocation">ヘルプ先</label>
+    <div class="nav-label">WORKSPACE</div>
 
-    <select id="helpLocation" name="helpLocation">
-    <option value="">ヘルプ先を選択してください</option>
-    <option value="イオン茅ケ崎中央教室">イオン茅ケ崎中央教室</option>
-    <option value="稲田堤駅前教室">稲田堤駅前教室</option>
-    <option value="大鳥居教室">大鳥居教室</option>
-    <option value="鹿島田教室">鹿島田教室</option>
-    <option value="菊名教室">菊名教室</option>
-    <option value="岸根公園駅前教室">岸根公園駅前教室</option>
-    <option value="久地教室">久地教室</option>
-    <option value="小机教室">小机教室</option>
-    <option value="神木本町教室">神木本町教室</option>
-    <option value="センター北あいたいタウン教室">センター北あいたいタウン教室</option>
-    <option value="たまプラーザ教室">たまプラーザ教室</option>
-    <option value="綱島教室">綱島教室</option>
-    <option value="中野島駅前教室">中野島駅前教室</option>
-    <option value="中山教室">中山教室</option>
-    <option value="初山教室">初山教室</option>
-    <option value="平塚旭教室">平塚旭教室</option>
-    <option value="平塚駅南口教室">平塚駅南口教室</option>
-    <option value="平塚四之宮教室">平塚四之宮教室</option>
-    <option value="平塚本校教室">平塚本校教室</option>
-    <option value="平間教室">平間教室</option>
-    <option value="溝の口教室">溝の口教室</option>
-    <option value="南加瀬教室">南加瀬教室</option>
-    <option value="宮崎台駅前教室">宮崎台駅前教室</option>
-    <option value="向ヶ丘遊園教室">向ヶ丘遊園教室</option>
-    <option value="武蔵小杉教室">武蔵小杉教室</option>
-    <option value="武蔵新城駅前教室">武蔵新城駅前教室</option>
-    <option value="元住吉教室">元住吉教室</option>
-    <option value="横浜三ツ沢教室">横浜三ツ沢教室</option>
-</select>
-  </div>
-</div>
-<label>出勤コマ:</label><br/>
-<label><input name="periods" type="checkbox" value="1"/>1限</label>
-<label><input name="periods" type="checkbox" value="2"/>2限</label>
-<label><input name="periods" type="checkbox" value="3"/>3限</label>
-<label><input name="periods" type="checkbox" value="4"/>4限</label>
-<label><input name="periods" type="checkbox" value="5"/>5限</label>
-<label><input name="periods" type="checkbox" value="6"/>6限</label><br/><br/>
-<label>事務作業時間（分）: <input min="0" name="office_minutes" type="number"/></label><br/><br/>
-<label>特別給の額（円）: <input min="0" name="special_amount" type="number"/></label><br/><br/>
-<label>備考: <input name="special_reason" placeholder="例：臨時会議" type="text"/></label><br/><br/>
-<button type="submit">打刻する</button>
-</br></form>
-<br/>
-<a href="index.html">メニューに戻る</a>
-<script type="module" src="input.js"></script></body>
+    <a class="nav-link" href="index.html">
+      <span class="nav-icon">⌂</span>ホーム
+    </a>
+
+    <a class="nav-link active" href="input.html">
+      <span class="nav-icon">＋</span>打刻入力
+    </a>
+
+    <a class="nav-link" href="list.html">
+      <span class="nav-icon">▦</span>勤怠一覧
+    </a>
+
+    <a class="nav-link" href="salary.html">
+      <span class="nav-icon">◈</span>給与確認
+    </a>
+
+    <div class="sidebar-foot">
+      ATTENDANCE SYSTEM<br/>
+      Personal workspace
+    </div>
+  </aside>
+
+  <div class="app-main">
+    <header class="topbar">
+      <div class="topbar-title">打刻入力</div>
+      <div class="topbar-date" id="today"></div>
+    </header>
+
+    <main class="content">
+      <div class="eyebrow">WORKSPACE</div>
+
+      <h1>打刻入力</h1>
+      <p class="subtitle">勤務内容を入力して記録します。</p>
+
+      <div class="panel form-card">
+        <form id="attendance-form">
+          <label>
+            日付:
+            <input name="date" required="" type="date"/>
+          </label>
+
+          <br>
+          <br/>
+
+          <!-- ヘルプ勤務 -->
+          <div class="form-group">
+            <label class="help-checkbox">
+              <input type="checkbox" id="isHelp" name="isHelp">
+              ヘルプ勤務
+            </label>
+
+            <div id="helpSelectArea" style="display: none; margin-top: 15px;">
+              <label for="helpLocation">ヘルプ先</label>
+
+              <select id="helpLocation" name="helpLocation">
+                <option value="">ヘルプ先を選択してください</option>
+                <option value="イオン茅ケ崎中央教室">イオン茅ケ崎中央教室</option>
+                <option value="稲田堤駅前教室">稲田堤駅前教室</option>
+                <option value="大鳥居教室">大鳥居教室</option>
+                <option value="鹿島田教室">鹿島田教室</option>
+                <option value="菊名教室">菊名教室</option>
+                <option value="岸根公園駅前教室">岸根公園駅前教室</option>
+                <option value="久地教室">久地教室</option>
+                <option value="小机教室">小机教室</option>
+                <option value="神木本町教室">神木本町教室</option>
+                <option value="センター北あいたいタウン教室">センター北あいたいタウン教室</option>
+                <option value="たまプラーザ教室">たまプラーザ教室</option>
+                <option value="綱島教室">綱島教室</option>
+                <option value="中野島駅前教室">中野島駅前教室</option>
+                <option value="中山教室">中山教室</option>
+                <option value="初山教室">初山教室</option>
+                <option value="平塚旭教室">平塚旭教室</option>
+                <option value="平塚駅南口教室">平塚駅南口教室</option>
+                <option value="平塚四之宮教室">平塚四之宮教室</option>
+                <option value="平塚本校教室">平塚本校教室</option>
+                <option value="平間教室">平間教室</option>
+                <option value="溝の口教室">溝の口教室</option>
+                <option value="南加瀬教室">南加瀬教室</option>
+                <option value="宮崎台駅前教室">宮崎台駅前教室</option>
+                <option value="向ヶ丘遊園教室">向ヶ丘遊園教室</option>
+                <option value="武蔵小杉教室">武蔵小杉教室</option>
+                <option value="武蔵新城駅前教室">武蔵新城駅前教室</option>
+                <option value="元住吉教室">元住吉教室</option>
+                <option value="横浜三ツ沢教室">横浜三ツ沢教室</option>
+              </select>
+            </div>
+          </div>
+
+          <label>出勤コマ:</label>
+          <br/>
+
+          <label><input name="periods" type="checkbox" value="1"/>1限</label>
+          <label><input name="periods" type="checkbox" value="2"/>2限</label>
+          <label><input name="periods" type="checkbox" value="3"/>3限</label>
+          <label><input name="periods" type="checkbox" value="4"/>4限</label>
+          <label><input name="periods" type="checkbox" value="5"/>5限</label>
+          <label><input name="periods" type="checkbox" value="6"/>6限</label>
+
+          <br/>
+          <br/>
+
+          <label>
+            事務作業時間（分）:
+            <input min="0" name="office_minutes" type="number"/>
+          </label>
+
+          <br/>
+          <br/>
+
+          <label>
+            特別給の額（円）:
+            <input min="0" name="special_amount" type="number"/>
+          </label>
+
+          <br/>
+          <br/>
+
+          <label>
+            備考:
+            <input name="special_reason" placeholder="例：臨時会議" type="text"/>
+          </label>
+
+          <br/>
+          <br/>
+
+          <button type="submit">打刻する</button>
+          </br>
+        </form>
+
+        <br/>
+
+        <a href="index.html">メニューに戻る</a>
+
+        <script type="module" src="input.js"></script>
+      </body>
 </html>
+```
