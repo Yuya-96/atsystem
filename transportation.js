@@ -14,7 +14,6 @@ export function createTransportationEditor(container, initialValue = null) {
           step="1"
           inputmode="numeric"
           placeholder="例：460"
-          required
         >
       </label>
       <p class="transport-note">
