@@ -5,57 +5,104 @@ import {
   showError,
   toast
 } from './firebase.js';
+import { createTransportationEditor } from './transportation.js';
 
 await requireUser();
 setupCommon();
 
-const form = document.getElementById('attendance-form'),
-      isHelp = document.getElementById('isHelp'),
-      area = document.getElementById('helpSelectArea'),
-      locationSelect = document.getElementById('helpLocation');
+const form = document.getElementById('attendance-form');
+const isHelp = document.getElementById('isHelp');
+const helpArea = document.getElementById('helpSelectArea');
+const locationSelect = document.getElementById('helpLocation');
+const helpTransportationArea = document.getElementById('helpTransportationArea');
+const hasSpecialTransport = document.getElementById('hasSpecialTransport');
+const specialTransportationArea = document.getElementById('specialTransportationArea');
 
-// ヘルプ勤務の選択状態に応じて表示を切り替え
-isHelp.addEventListener('change', () => {
-  area.style.display = isHelp.checked ? 'block' : 'none';
+const helpTransportEditor = createTransportationEditor(
+  document.getElementById('helpTransportEditor')
+);
+const specialTransportEditor = createTransportationEditor(
+  document.getElementById('specialTransportEditor')
+);
+
+function toggleHelp() {
+  helpArea.style.display = isHelp.checked ? 'block' : 'none';
   locationSelect.required = isHelp.checked;
+  helpTransportationArea.hidden = !isHelp.checked;
 
   if (!isHelp.checked) {
     locationSelect.value = '';
   }
-});
+}
 
-// 打刻データの保存
-form.addEventListener('submit', async e => {
-  e.preventDefault();
+function toggleSpecialTransport() {
+  specialTransportationArea.hidden = !hasSpecialTransport.checked;
+}
+
+isHelp.addEventListener('change', toggleHelp);
+hasSpecialTransport.addEventListener('change', toggleSpecialTransport);
+
+toggleHelp();
+toggleSpecialTransport();
+
+form.addEventListener('submit', async event => {
+  event.preventDefault();
 
   if (!form.reportValidity()) return;
+
+  if (isHelp.checked) {
+    const error = helpTransportEditor.validate();
+    if (error) {
+      toast(error);
+      return;
+    }
+  }
+
+  if (hasSpecialTransport.checked) {
+    const error = specialTransportEditor.validate();
+    if (error) {
+      toast(error);
+      return;
+    }
+  }
 
   const button = form.querySelector('[type="submit"]');
   button.disabled = true;
 
-  const f = new FormData(form);
+  const formData = new FormData(form);
+  const transportation = {};
+
+  if (isHelp.checked) {
+    transportation.help = helpTransportEditor.getValue();
+  }
+
+  if (hasSpecialTransport.checked) {
+    transportation.special = specialTransportEditor.getValue();
+  }
 
   try {
     await addAttendance({
-      date: f.get('date'),
-      periods: f.getAll('periods'),
-      officeMinutes: Number(f.get('office_minutes') || 0),
-      specialReason: f.get('special_reason') || '',
-      specialAmount: Number(f.get('special_amount') || 0),
+      date: formData.get('date'),
+      periods: formData.getAll('periods'),
+      officeMinutes: Number(formData.get('office_minutes') || 0),
+      specialReason: formData.get('special_reason') || '',
+      specialAmount: Number(formData.get('special_amount') || 0),
       isHelp: isHelp.checked,
-      helpLocation: isHelp.checked ? locationSelect.value : ''
+      helpLocation: isHelp.checked ? locationSelect.value : '',
+      transportation: Object.keys(transportation).length ? transportation : null
     });
 
     form.reset();
-
-    area.style.display = 'none';
+    helpArea.style.display = 'none';
+    helpTransportationArea.hidden = true;
+    specialTransportationArea.hidden = true;
     locationSelect.required = false;
+    helpTransportEditor.reset();
+    specialTransportEditor.reset();
 
     toast('✓ 打刻を保存しました');
-
-  } catch (err) {
-    showError(err);
-
+  } catch (error) {
+    showError(error);
   } finally {
     button.disabled = false;
   }

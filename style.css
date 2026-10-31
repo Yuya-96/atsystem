@@ -253,3 +253,197 @@ html.auth-pending .app-main,html.auth-pending .sidebar{visibility:hidden}
     transition: none;
   }
 }
+
+/* 交通費入力 */
+.transport-section {
+  margin: 16px 0 8px;
+  padding: 18px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: #f8faff;
+}
+
+.transport-section[hidden],
+.station-suggestions[hidden],
+.transport-selected[hidden] {
+  display: none !important;
+}
+
+.transport-section h3 {
+  margin: 0 0 14px;
+  color: var(--navy);
+  font-size: 15px;
+}
+
+.transport-editor {
+  display: grid;
+  gap: 14px;
+}
+
+.transport-stations,
+.transport-fare-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.transport-field {
+  position: relative;
+  display: grid;
+  gap: 7px;
+  line-height: 1.5;
+  min-width: 0;
+}
+
+.transport-field input,
+.transport-field select {
+  width: 100%;
+}
+
+.station-suggestions {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  z-index: 30;
+  max-height: 230px;
+  overflow-y: auto;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  box-shadow: 0 12px 28px rgba(23, 43, 77, .13);
+}
+
+.station-suggestion {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 0;
+  border-bottom: 1px solid var(--border);
+  background: #fff;
+  color: var(--navy);
+  text-align: left;
+}
+
+.station-suggestion:last-child {
+  border-bottom: 0;
+}
+
+.station-suggestion small {
+  margin-top: 3px;
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.transport-search {
+  justify-self: start;
+}
+
+.transport-status {
+  margin: -5px 0 0;
+}
+
+.transport-results {
+  display: grid;
+  gap: 10px;
+}
+
+.route-option {
+  padding: 14px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: #fff;
+}
+
+.route-option.selected {
+  border-color: var(--blue);
+  background: #f5f8ff;
+}
+
+.route-option-heading,
+.transport-total-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.route-fare {
+  color: var(--navy);
+  font-weight: 800;
+}
+
+.route-path {
+  margin-top: 10px;
+  color: var(--navy);
+  font-weight: 700;
+  line-height: 1.7;
+  overflow-wrap: anywhere;
+}
+
+.route-lines,
+.route-meta {
+  margin-top: 5px;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.route-select-button {
+  margin-top: 12px;
+  padding: 9px 14px;
+  font-size: 12px;
+}
+
+.transport-selected {
+  padding: 13px;
+  border-radius: 11px;
+  background: #edf7f1;
+}
+
+.transport-selected-title {
+  color: #286344;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.transport-selected-route {
+  margin-top: 6px;
+  color: var(--navy);
+  font-weight: 700;
+  line-height: 1.7;
+}
+
+.transport-total-row {
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+}
+
+.transport-total-row strong {
+  color: #16804a;
+  font-size: 22px;
+}
+
+.transport-note,
+.transport-credit {
+  margin: 0;
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.6;
+}
+
+.transport-special-toggle {
+  margin-top: 20px;
+}
+
+@media (max-width: 560px) {
+  .transport-stations,
+  .transport-fare-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .transport-section {
+    padding: 13px;
+  }
+}

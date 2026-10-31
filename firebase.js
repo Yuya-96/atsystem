@@ -284,7 +284,8 @@ export async function migrateLocal() {
         r.specialReason,
         r.specialAmount,
         r.isHelp,
-        r.helpLocation
+        r.helpLocation,
+        r.transportation || null
       ])
     )
   );
@@ -299,7 +300,8 @@ export async function migrateLocal() {
       r.specialReason,
       r.specialAmount,
       r.isHelp,
-      r.helpLocation
+      r.helpLocation,
+      r.transportation || null
     ]);
 
     if (seen.has(key)) continue;

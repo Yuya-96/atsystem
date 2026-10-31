@@ -7,49 +7,59 @@ import {
   showError,
   toast
 } from './firebase.js';
+import { createTransportationEditor } from './transportation.js';
 
 await requireUser();
 setupCommon();
 
-const form = document.getElementById('edit-form'),
-      isHelp = document.getElementById('isHelp'),
-      area = document.getElementById('helpSelectArea'),
-      helpLocation = document.getElementById('helpLocation'),
-      params = new URLSearchParams(location.search);
+const form = document.getElementById('edit-form');
+const isHelp = document.getElementById('isHelp');
+const helpArea = document.getElementById('helpSelectArea');
+const helpLocation = document.getElementById('helpLocation');
+const helpTransportationArea = document.getElementById('helpTransportationArea');
+const hasSpecialTransport = document.getElementById('hasSpecialTransport');
+const specialTransportationArea = document.getElementById('specialTransportationArea');
+const params = new URLSearchParams(location.search);
 
-function toggle() {
-  area.style.display = isHelp.checked ? 'block' : 'none';
+let helpTransportEditor;
+let specialTransportEditor;
+
+function toggleHelp() {
+  helpArea.style.display = isHelp.checked ? 'block' : 'none';
   helpLocation.required = isHelp.checked;
+  helpTransportationArea.hidden = !isHelp.checked;
 
   if (!isHelp.checked) {
     helpLocation.value = '';
   }
 }
 
-isHelp.addEventListener('change', toggle);
+function toggleSpecialTransport() {
+  specialTransportationArea.hidden = !hasSpecialTransport.checked;
+}
+
+isHelp.addEventListener('change', toggleHelp);
+hasSpecialTransport.addEventListener('change', toggleSpecialTransport);
 
 try {
   const data = await readAttendance();
-
-  const record = data.find(r =>
+  const record = data.find(item =>
     params.has('id')
-      ? r.id === params.get('id')
-      : r.date === params.get('date')
+      ? item.id === params.get('id')
+      : item.date === params.get('date')
   );
 
   if (!record) {
     toast('該当する勤務記録が見つかりません。');
-
-    form.querySelectorAll('input,button,select').forEach(e =>
-      e.disabled = true
-    );
-
+    form.querySelectorAll('input, button, select').forEach(element => {
+      element.disabled = true;
+    });
   } else {
     form.elements.date.value = record.date;
 
-    form.querySelectorAll('[name="periods"]').forEach(el =>
-      el.checked = (record.periods || []).map(String).includes(el.value)
-    );
+    form.querySelectorAll('[name="periods"]').forEach(element => {
+      element.checked = (record.periods || []).map(String).includes(element.value);
+    });
 
     form.elements.office_minutes.value = record.officeMinutes ?? 0;
     form.elements.special_reason.value = record.specialReason || '';
@@ -59,54 +69,80 @@ try {
 
     if (
       record.helpLocation &&
-      !Array.from(helpLocation.options).some(
-        o => o.value === record.helpLocation
-      )
+      !Array.from(helpLocation.options).some(option => option.value === record.helpLocation)
     ) {
-      helpLocation.add(
-        new Option(record.helpLocation, record.helpLocation)
-      );
+      helpLocation.add(new Option(record.helpLocation, record.helpLocation));
     }
 
     helpLocation.value = record.helpLocation || '';
+    helpTransportEditor = createTransportationEditor(
+      document.getElementById('helpTransportEditor'),
+      record.transportation?.help || null
+    );
+    specialTransportEditor = createTransportationEditor(
+      document.getElementById('specialTransportEditor'),
+      record.transportation?.special || null
+    );
 
-    toggle();
+    toggleHelp();
+    hasSpecialTransport.checked = Boolean(record.transportation?.special);
+    toggleSpecialTransport();
 
-    form.addEventListener('submit', async e => {
-      e.preventDefault();
+    form.addEventListener('submit', async event => {
+      event.preventDefault();
 
       if (!form.reportValidity()) return;
 
-      const f = new FormData(form),
-            newDate = f.get('date');
+      if (isHelp.checked) {
+        const error = helpTransportEditor.validate();
+        if (error) {
+          toast(error);
+          return;
+        }
+      }
+
+      if (hasSpecialTransport.checked) {
+        const error = specialTransportEditor.validate();
+        if (error) {
+          toast(error);
+          return;
+        }
+      }
+
+      const formData = new FormData(form);
+      const newDate = formData.get('date');
 
       if (
         newDate !== record.date &&
-        data.some(r => r.id !== record.id && r.date === newDate)
+        data.some(item => item.id !== record.id && item.date === newDate)
       ) {
         toast('変更先の日付には既に勤務記録があります。');
         return;
       }
 
-      const btn = document.getElementById('saveBtn');
-      btn.disabled = true;
+      const button = document.getElementById('saveBtn');
+      button.disabled = true;
+
+      const transportation = {};
+      if (isHelp.checked) transportation.help = helpTransportEditor.getValue();
+      if (hasSpecialTransport.checked) transportation.special = specialTransportEditor.getValue();
 
       try {
         await updateAttendance(record.id, {
           date: newDate,
-          periods: f.getAll('periods'),
-          officeMinutes: Number(f.get('office_minutes') || 0),
-          specialReason: f.get('special_reason') || '',
-          specialAmount: Number(f.get('special_amount') || 0),
+          periods: formData.getAll('periods'),
+          officeMinutes: Number(formData.get('office_minutes') || 0),
+          specialReason: formData.get('special_reason') || '',
+          specialAmount: Number(formData.get('special_amount') || 0),
           isHelp: isHelp.checked,
-          helpLocation: isHelp.checked ? helpLocation.value : ''
+          helpLocation: isHelp.checked ? helpLocation.value : '',
+          transportation: Object.keys(transportation).length ? transportation : null
         });
 
         location.href = 'list.html';
-
-      } catch (err) {
-        showError(err);
-        btn.disabled = false;
+      } catch (error) {
+        showError(error);
+        button.disabled = false;
       }
     });
 
@@ -116,13 +152,11 @@ try {
       try {
         await removeAttendance(record.id);
         location.href = 'list.html';
-
-      } catch (err) {
-        showError(err);
+      } catch (error) {
+        showError(error);
       }
     };
   }
-
-} catch (e) {
-  showError(e);
+} catch (error) {
+  showError(error);
 }
