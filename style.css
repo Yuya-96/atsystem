@@ -460,3 +460,8 @@ html.auth-pending .app-main,html.auth-pending .sidebar{visibility:hidden}
     padding: 13px;
   }
 }
+@media (min-width: 721px) {
+  .sidebar .brand {
+    gap: 2px !important;
+  }
+}
