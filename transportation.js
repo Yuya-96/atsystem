@@ -194,13 +194,28 @@ export function createTransportationEditor(container, initialValue = null) {
     else toAbort = controller;
 
     try {
-      const url = new URL(API_BASE + '/places/suggest');
+      // 駅名専用の候補APIを利用する（バス停・施設などを候補に混ぜない）。
+      const url = new URL(API_BASE + '/locations/suggest');
       url.searchParams.set('q', query);
       url.searchParams.set('limit', '8');
       const response = await fetch(url, { signal: controller.signal });
-      if (!response.ok) throw new Error('駅名候補を取得できませんでした。');
+      if (!response.ok) {
+        throw new Error(`駅名候補の取得に失敗しました（${response.status}）。`);
+      }
       const data = await response.json();
-      const places = data.places || [];
+      if (input.value.trim() !== query) return;
+
+      // locations/suggest は places ではなく stations を返す。
+      // 経路検索で利用する endpoint には feed 修飾子付き station id を渡す。
+      const places = (data.stations || []).map(station => ({
+        id: station.id,
+        endpoint: station.id,
+        name: station.name,
+        description: station.nameKana || '',
+        feedName: station.feedName,
+        feedId: station.feedId,
+        kind: station.kind
+      }));
 
       showSuggestions(input, list, places, place => {
         if (side === 'from') fromPlace = place;
@@ -208,10 +223,15 @@ export function createTransportationEditor(container, initialValue = null) {
         clearSelectedRoute();
         status.textContent = '乗車駅・降車駅を選択したら経路候補を検索してください。';
       });
+
+      if (!places.length) {
+        status.textContent = `「${query}」に一致する駅候補が見つかりませんでした。駅名を確認してください。`;
+      }
     } catch (error) {
       if (error.name !== 'AbortError') {
         list.replaceChildren();
         list.hidden = true;
+        status.textContent = `${error.message} 時間をおいて再度入力してください。`;
       }
     }
   }
