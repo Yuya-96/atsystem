@@ -337,6 +337,19 @@ html.auth-pending .app-main,html.auth-pending .sidebar{visibility:hidden}
   font-size: 11px;
 }
 
+.transport-mode-option {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: fit-content;
+  font-size: 14px;
+}
+
+.transport-mode-option input {
+  width: auto;
+  margin: 0;
+}
+
 .transport-search {
   justify-self: start;
 }

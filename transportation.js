@@ -62,8 +62,12 @@ export function createTransportationEditor(container, initialValue = null) {
         </label>
       </div>
 
+      <label class="transport-mode-option">
+        <input type="checkbox" class="transport-include-bus">
+        バスを含む経路も検索する
+      </label>
       <button type="button" class="transport-search">経路候補を検索</button>
-      <p class="transport-status helper" aria-live="polite">駅名を入力して候補を選択してください。</p>
+      <p class="transport-status helper" aria-live="polite">初期設定は鉄道のみで検索します。バスを利用した場合はチェックを入れてください。</p>
       <div class="transport-results"></div>
 
       <div class="transport-selected" hidden>
@@ -100,6 +104,7 @@ export function createTransportationEditor(container, initialValue = null) {
   const fromSuggestions = container.querySelector('.from-suggestions');
   const toSuggestions = container.querySelector('.to-suggestions');
   const searchButton = container.querySelector('.transport-search');
+  const includeBus = container.querySelector('.transport-include-bus');
   const status = container.querySelector('.transport-status');
   const results = container.querySelector('.transport-results');
   const selectedBox = container.querySelector('.transport-selected');
@@ -312,7 +317,7 @@ export function createTransportationEditor(container, initialValue = null) {
         date,
         time: '12:00',
         type: 'departure',
-        allowModes: 'rail,bus',
+        allowModes: includeBus.checked ? 'rail,bus' : 'rail',
         maxTransfers: 4,
         numItineraries: 6
       });
@@ -321,7 +326,9 @@ export function createTransportationEditor(container, initialValue = null) {
 
       const journeys = data.journeys || [];
       if (!journeys.length) {
-        status.textContent = '経路候補が見つかりませんでした。駅名を変えて再検索するか、運賃を手入力してください。';
+        status.textContent = includeBus.checked
+          ? '経路候補が見つかりませんでした。駅名を変えて再検索するか、運賃を手入力してください。'
+          : '鉄道の経路候補が見つかりませんでした。バスも利用した場合は「バスを含む経路も検索する」にチェックして再検索してください。';
         return;
       }
 
@@ -352,7 +359,7 @@ export function createTransportationEditor(container, initialValue = null) {
         results.appendChild(card);
       });
 
-      status.textContent = `${journeys.length}件の経路候補が見つかりました。実際に利用した経路を選択してください。`;
+      status.textContent = `${journeys.length}件の${includeBus.checked ? '鉄道・バス' : '鉄道'}経路候補が見つかりました。実際に利用した経路を選択してください。`; 
     } catch (error) {
       if (error.name !== 'AbortError') {
         status.textContent = `${error.message} 駅名と運賃を手入力して登録することもできます。`;
