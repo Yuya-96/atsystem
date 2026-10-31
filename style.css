@@ -460,6 +460,8 @@ html.auth-pending .app-main,html.auth-pending .sidebar{visibility:hidden}
     padding: 13px;
   }
 }
+
+/* サイドバーのタイトル文字をロゴ側へ寄せる（PC表示） */
 @media (min-width: 721px) {
   .sidebar .brand {
     gap: 2px !important;
